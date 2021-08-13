@@ -38,16 +38,17 @@ public class Game {
 
     public void play() {
         round();
+
     }
 
     // TODO: 8/11/2021 get round to reset and start with new rolls and clear map. 
     public void round() {
+        isActiveRound = true;
         isStartingRoundPlayer = true;
         rollAll();
         spaces();
-        isActiveRound = true;
         while (isActiveRound) {
-        turn();
+            turn();
         }
 
     }
@@ -73,21 +74,28 @@ public class Game {
     }
 
     public void turn() {
-        for (Player activePlayer : playerList) {
-            if (isStartingRoundPlayer) {
-                startingRoundBid(activePlayer);
-                isStartingRoundPlayer = false;
-                isValidBid = false;
-            } else {
-                bid(activePlayer);
-                spaces();
-               isValidBid = false;
-            }
-            if (lieCalled) {
-                checkLie(activePlayer);
+            for (Player activePlayer : playerList) {
+
+                    if (isStartingRoundPlayer) {
+                        startingRoundBid(activePlayer);
+                        isStartingRoundPlayer = false;
+                        isValidBid = false;
+                    } else {
+                        bid(activePlayer);
+                        spaces();
+                        if (!isActiveRound) {
+
+                        }
+                         //isValidBid = false;
+                    }
+                    if (lieCalled) {
+                        showHands();
+                        checkLie(activePlayer);
+                        break;
+                    }
+
             }
 
-        }
     }
 
     public void startingRoundBid(Player activePlayer) {
@@ -126,11 +134,6 @@ public class Game {
                 System.out.println("Enter die face value: ");
                 currentBidDieFaceValue = scanner.nextInt();
                 scanner.nextLine();
-
-            } else if (bidOrCall.equals("l")) {
-                lieCalled = true;
-                break;
-            }
             if (currentBidDieFaceValue > previousBidFaceValue) {
                 isValidBid = true;
                 System.out.println("Valid Bid2...");
@@ -140,6 +143,12 @@ public class Game {
             } else {
                 isValidBid = false;
                 System.out.println("Invalid Bid2!!!");
+            }
+
+            } else if (bidOrCall.equals("l")) {
+                lieCalled = true;
+                isActiveRound = false;
+                isValidBid = true;
             }
         } while (!isValidBid);
 
@@ -167,8 +176,8 @@ public class Game {
             System.out.println("Bid was not a lie you lose a die");
             playerList.get(playerList.indexOf(activePlayer)).cup.dice.remove(0);
         }
-        isActiveRound = false;
-        isALie = false;
+//        isActiveRound = false;
+//        isALie = false;
     }
 
     // TODO: 8/11/2021 implement remove, declare winner, showHands and dice on table. 
@@ -189,12 +198,13 @@ public class Game {
 //        }
 //    }
 //
-//    public void showHands() {
-//        for (Player players : playerList) {
-//            System.out.println(players.playerName + "'s Hand " + players.cup.displayHand());
-//            isRoundStartingPlayer = true;
-//        }
-//    }
+    public void showHands() {
+        for (Player players : playerList) {
+            System.out.println(players.playerName + "'s Hand " + players.cup.displayHand());
+            isStartingRoundPlayer = true;
+        }
+            System.out.println("The dice on the table are: " + diceOnTable);
+    }
 
 
     public void spaces() {
