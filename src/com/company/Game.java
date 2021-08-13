@@ -44,17 +44,19 @@ public class Game {
 
     }
 
-    // TODO: 8/11/2021 get round to reset and start with new rolls and clear map. 
+    // TODO: 8/11/2021 get round to reset and start with new rolls and clear map.
     public void round() {
         isActiveRound = true;
         isStartingRoundPlayer = true;
+        lieCalled = false;
         rollAll();
-        spaces();
+        //spaces();
+        System.out.println("-------------------------------------------");
+        System.out.println("Begin Round");
+        System.out.println("-------------------------------------------");
         while (isActiveRound) {
             turn();
         }
-        System.out.println("-------------------------------------------");
-        System.out.println("New Round");
         play();
     }
 
@@ -77,7 +79,6 @@ public class Game {
 
     public void turn() {
             for (Player activePlayer : playerList) {
-
                     if (isStartingRoundPlayer) {
                         startingRoundBid(activePlayer);
                         isStartingRoundPlayer = false;
@@ -85,13 +86,12 @@ public class Game {
                     } else {
                         bid(activePlayer);
                         spaces();
-
                     }
                     if (lieCalled) {
                         showHands();
                         checkLie(activePlayer);
                         remove();
-                        //break;
+                        break;
                     }
             }
             declareWinner();
@@ -121,6 +121,7 @@ public class Game {
         previousBidFaceValue = currentBidDieFaceValue;
         do {
             System.out.println("Previous bid: " + previousBidQty + "x " + previousBidFaceValue);
+            System.out.println("-------------------------------------------");
             System.out.println("Player " + activePlayer.playerName + "'s turn.");
             System.out.println("Your hand is " + activePlayer.cup.displayHand());
 
@@ -154,6 +155,7 @@ public class Game {
     }
 
     public void checkLie(Player activePlayer) {
+
         isALie = !diceOnTable.containsKey(previousBidFaceValue) || diceOnTable.get(previousBidFaceValue) < previousBidQty;
         if (isALie) {
             System.out.println("bid was a lie");
@@ -197,7 +199,7 @@ public class Game {
 
     public void spaces() {
         int spaceCounter = 0;
-        while (spaceCounter < 20) {
+        while (spaceCounter < 33) {
             System.out.println();
             spaceCounter++;
         }
