@@ -9,6 +9,7 @@ public class Game {
     public final byte MAX_PLAYERS = 8;
     public final byte MIN_PLAYERS = 1;
 
+    public boolean isActiveGame = false;
     public boolean isALie = false;
     public boolean isActiveRound = false;
     public boolean isStartingRoundPlayer = true;
@@ -37,7 +38,9 @@ public class Game {
     }
 
     public void play() {
+        isActiveGame = true;
         round();
+
 
     }
 
@@ -50,16 +53,16 @@ public class Game {
         while (isActiveRound) {
             turn();
         }
-
+        System.out.println("-------------------------------------------");
+        System.out.println("New Round");
+        play();
     }
 
     public void rollAll() {
         for (Player activePlayer : playerList) {
             activePlayer.cup.roll();
-            //System.out.println(activePlayer.cup.displayHand());
             setDiceOnTable(activePlayer.cup.dice);
         }
-        //System.out.println(diceOnTable);
     }
 
     public void setDiceOnTable(List<Die> dice) {
@@ -70,7 +73,6 @@ public class Game {
                 diceOnTable.put(die.faceValue, 1);
             }
         }
-
     }
 
     public void turn() {
@@ -83,19 +85,16 @@ public class Game {
                     } else {
                         bid(activePlayer);
                         spaces();
-                        if (!isActiveRound) {
 
-                        }
-                         //isValidBid = false;
                     }
                     if (lieCalled) {
                         showHands();
                         checkLie(activePlayer);
-                        break;
+                        remove();
+                        //break;
                     }
-
             }
-
+            declareWinner();
     }
 
     public void startingRoundBid(Player activePlayer) {
@@ -134,16 +133,16 @@ public class Game {
                 System.out.println("Enter die face value: ");
                 currentBidDieFaceValue = scanner.nextInt();
                 scanner.nextLine();
-            if (currentBidDieFaceValue > previousBidFaceValue) {
-                isValidBid = true;
-                System.out.println("Valid Bid2...");
-            } else if (currentBidDieFaceValue == previousBidFaceValue && currentBidDieQty > previousBidQty) {
-                isValidBid = true;
-                System.out.println("Valid Bid2...");
-            } else {
-                isValidBid = false;
-                System.out.println("Invalid Bid2!!!");
-            }
+                if (currentBidDieFaceValue > previousBidFaceValue) {
+                    isValidBid = true;
+                    System.out.println("Valid Bid2...");
+                } else if (currentBidDieFaceValue == previousBidFaceValue && currentBidDieQty > previousBidQty) {
+                    isValidBid = true;
+                    System.out.println("Valid Bid2...");
+                } else {
+                    isValidBid = false;
+                    System.out.println("Invalid Bid2!!!");
+                }
 
             } else if (bidOrCall.equals("l")) {
                 lieCalled = true;
@@ -152,10 +151,8 @@ public class Game {
             }
         } while (!isValidBid);
 
-
     }
 
-    // TODO: 8/11/2021  test more to make sure the logic is working. 
     public void checkLie(Player activePlayer) {
         isALie = !diceOnTable.containsKey(previousBidFaceValue) || diceOnTable.get(previousBidFaceValue) < previousBidQty;
         if (isALie) {
@@ -168,36 +165,28 @@ public class Game {
             } else {
             System.out.println(playerList.get(playerList.indexOf(activePlayer) - 1).playerName + " loses a die.");
             playerList.get(playerList.indexOf(activePlayer) - 1).cup.dice.remove(0);
-
-                //            System.out.println(playerList.get(playerList.indexOf(activePlayer) - 1).cup.dice);
             }
-        }
-        else if (!isALie){
+        } else if (!isALie) {
             System.out.println("Bid was not a lie you lose a die");
             playerList.get(playerList.indexOf(activePlayer)).cup.dice.remove(0);
         }
-//        isActiveRound = false;
-//        isALie = false;
     }
 
-    // TODO: 8/11/2021 implement remove, declare winner, showHands and dice on table. 
-    
+    public void remove() {
+        playerList.removeIf(player -> player.cup.dice.size() == 0);
 
-//    public void remove() {
-//        playerList.removeIf(player -> player.cup.dice.size() == 0);
-//
-//    }
-//
-//    public void declareWinner() {
-//        for (Player players : playerList) {
-//            if (playerList.size() == 1) {
-//                System.out.println(players.playerName + " is the winner, Game Over.");
-//                isActiveGame = false;
-//                System.exit(0);
-//            }
-//        }
-//    }
-//
+    }
+
+    public void declareWinner() {
+        for (Player players : playerList) {
+            if (playerList.size() == 1) {
+                System.out.println(players.playerName + " is the winner, Game Over.");
+                isActiveGame = false;
+                System.exit(0);
+            }
+        }
+    }
+
     public void showHands() {
         for (Player players : playerList) {
             System.out.println(players.playerName + "'s Hand " + players.cup.displayHand());
@@ -206,7 +195,6 @@ public class Game {
             System.out.println("The dice on the table are: " + diceOnTable);
     }
 
-
     public void spaces() {
         int spaceCounter = 0;
         while (spaceCounter < 20) {
@@ -214,10 +202,5 @@ public class Game {
             spaceCounter++;
         }
     }
-
-
-
-
-
 
 }
