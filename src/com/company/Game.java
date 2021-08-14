@@ -44,7 +44,6 @@ public class Game {
 
     }
 
-    // TODO: 8/11/2021 get round to reset and start with new rolls and clear map.
     public void round() {
         isActiveRound = true;
         isStartingRoundPlayer = true;
@@ -190,10 +189,13 @@ public class Game {
     }
 
     public void showHands() {
+            System.out.println("The suspected lie was " + previousBidQty + "x " + previousBidFaceValue);
         for (Player players : playerList) {
+            System.out.println("-------------------------------------------");
             System.out.println(players.playerName + "'s Hand " + players.cup.displayHand());
             isStartingRoundPlayer = true;
         }
+            System.out.println("-------------------------------------------");
             System.out.println("The dice on the table are: " + diceOnTable);
     }
 
