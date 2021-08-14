@@ -48,6 +48,7 @@ public class Game {
         isActiveRound = true;
         isStartingRoundPlayer = true;
         lieCalled = false;
+        diceOnTable.clear();
         rollAll();
         //spaces();
         System.out.println("-------------------------------------------");
@@ -135,13 +136,13 @@ public class Game {
                 scanner.nextLine();
                 if (currentBidDieFaceValue > previousBidFaceValue) {
                     isValidBid = true;
-                    System.out.println("Valid Bid2...");
+                    System.out.println("Valid Bid...");
                 } else if (currentBidDieFaceValue == previousBidFaceValue && currentBidDieQty > previousBidQty) {
                     isValidBid = true;
-                    System.out.println("Valid Bid2...");
+                    System.out.println("Valid Bid...");
                 } else {
                     isValidBid = false;
-                    System.out.println("Invalid Bid2!!!");
+                    System.out.println("Invalid Bid!!!");
                 }
 
             } else if (bidOrCall.equals("l")) {
@@ -168,7 +169,7 @@ public class Game {
             playerList.get(playerList.indexOf(activePlayer) - 1).cup.dice.remove(0);
             }
         } else if (!isALie) {
-            System.out.println("Bid was not a lie you lose a die");
+            System.out.println("Bid was not a lie " + activePlayer.playerName +  " loses a die");
             playerList.get(playerList.indexOf(activePlayer)).cup.dice.remove(0);
         }
     }
@@ -189,7 +190,7 @@ public class Game {
     }
 
     public void showHands() {
-            System.out.println("The suspected lie was " + previousBidQty + "x " + previousBidFaceValue);
+            System.out.println("The suspected lying bid amount was " + previousBidQty + "x " + previousBidFaceValue);
         for (Player players : playerList) {
             System.out.println("-------------------------------------------");
             System.out.println(players.playerName + "'s Hand " + players.cup.displayHand());
