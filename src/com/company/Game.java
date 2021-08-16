@@ -31,10 +31,15 @@ public class Game {
             scanner.nextLine();
         } while (numberOfPlayers < MIN_PLAYERS || numberOfPlayers > MAX_PLAYERS);
 
+        System.out.println("Enter how many dice this game will be played with: ");
+        Cup.numOfDice = scanner.nextInt();
+        scanner.nextLine();
+
         while (playerList.size() < numberOfPlayers) {
             System.out.println("Enter player name: ");
             playerList.add(new Player((scanner.nextLine()).trim()));
         }
+
     }
 
     public void play() {

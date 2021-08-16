@@ -5,9 +5,10 @@ import java.util.List;
 
 public class Cup {
     List<Die> dice = new ArrayList<>();
+    public static int numOfDice;
 
     public Cup () {
-        while (dice.size() < 5) {
+        while (dice.size() < numOfDice) {
             dice.add(new Die());
         }
     }
@@ -25,4 +26,6 @@ public class Cup {
         }
         return hand;
     }
+
+
 }
